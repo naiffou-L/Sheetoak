@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Réseau Social Minimaliste</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 10px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .upload-section {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .upload-label {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .upload-label:hover {
+            background-color: #0056b3;
+        }
+        .post {
+            border-bottom: 1px solid #ddd;
+            padding: 10px 0;
+        }
+        .post img {
+            max-width: 100%;
+            border-radius: 5px;
+        }
+        .post h3 {
+            margin: 5px 0;
+            color: #007bff;
+        }
+        .like-btn {
+            display: inline-block;
+            margin-top: 5px;
+            padding: 10px 20px;
+            background-color: #ff3b3b;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .like-btn:hover {
+            background-color: #ff1e1e;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Réseau Social Minimaliste</h1>
+</header>
+
+<div class="container">
+    <!-- Section Importer -->
+    <div class="upload-section">
+        <a href="add-image.html" class="upload-label">Importer une image</a>
+    </div>
+
+    <!-- Zone des posts -->
+    <div id="posts">
+        <!-- Les publications s'affichent ici -->
+    </div>
+</div>
+
+<footer>
+    <p style="text-align:center;">&copy; 2024 Réseau Social Minimaliste</p>
+</footer>
+
+<script>
+    // Charger les publications
+    function loadPosts() {
+        const postsContainer = document.getElementById("posts");
+        const posts = JSON.parse(localStorage.getItem("posts")) || [];
+
+        postsContainer.innerHTML = ""; // Nettoyer avant d'ajouter les publications
+
+        posts.forEach((post, index) => {
+            const postElement = document.createElement("div");
+            postElement.className = "post";
+
+            postElement.innerHTML = `
+                <h3>${post.title}</h3>
+                <img src="${post.imageUrl}" alt="${post.title}">
+                <button class="like-btn" onclick="likePost(${index})">
+                    J'aime (<span id="likes-count-${index}">${post.likes}</span>)
+                </button>
+            `;
+
+            postsContainer.appendChild(postElement);
+        });
+    }
+
+    // Fonction pour liker une publication
+    function likePost(index) {
+        const posts = JSON.parse(localStorage.getItem("posts")) || [];
+        posts[index].likes++;
+        localStorage.setItem("posts", JSON.stringify(posts));
+        loadPosts(); // Recharger les publications
+    }
+
+    // Charger les publications au démarrage
+    window.onload = loadPosts;
+</script>
+
+</body>
+</html>
